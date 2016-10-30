@@ -4,8 +4,8 @@ const
     AWS = require('aws-sdk');
 
 const tableName = 'testing-token-1';
-const accessKeyId = '';
-const secretAccessKey = '';
+const accessKeyId = 'xxx';
+const secretAccessKey = 'xxx';
 const region = 'eu-west-1';
 const endpoint = 'dynamodb.eu-west-1.amazonaws.com';    
 
@@ -51,13 +51,14 @@ this.constructPolicy = (email) => {
   let policy = {
     "principalId": "1",
     "policyDocument": {        
-        "Version": "2016-10-29",
+        "Version": "2012-10-17",
         "Statement": [
           {
             "Action": "execute-api:Invoke",
             "Effect": "Allow",
             "Resource": [
-              "arn:aws:execute-api:eu-west-1:732042213639:r5wc3eim09/test/GET/instant-mobile-receiver-uploaded-files-test/" + escape(email) + "%2F*"
+              "arn:aws:execute-api:eu-west-1:732042213639:r5wc3eim09/test/GET/instant-mobile-receiver-uploaded-files-test/" + escape(email) + "%2F*",
+              "arn:aws:execute-api:eu-west-1:732042213639:r5wc3eim09/test/PUT/instant-mobile-receiver-uploaded-files-test/" + escape(email) + "%2F*"
             ]
           }
         ]
@@ -75,9 +76,10 @@ exports.handler = (event, context, callback) => {
   this.findEmailFromToken(token)
 
   .then(email => {
-
-    let policy = this.constructPolicy(email);
+    
+    let policy = this.constructPolicy(email); 
     callback(null, policy);
+    
   })
 
   .catch(err => {
